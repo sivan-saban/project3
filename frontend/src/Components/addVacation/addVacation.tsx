@@ -25,7 +25,7 @@ function AddVacation(): JSX.Element {
 			<header><MenuAdmin/></header>
             <div className="Box">
                 <form onSubmit={handleSubmit(send)}>
-                    <h2>Add Vacation</h2>
+                    <h2>Add Vacation!</h2>
 
                     <label>destination:</label>
                     <input type="text" {...register("destination")}/>
