@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Vacation from "../../Models/Vacation";
@@ -7,11 +8,17 @@ import "./addVacation.css";
 
 function AddVacation(): JSX.Element {
     const { register, handleSubmit } = useForm<Vacation>();
+    const [file, setFile] = useState("");
     const navigate = useNavigate();
-    
+    const handleFile = (f:any) => {
+        f.preventDefault();
+        setFile(f.target.files[0]);
+    }
+
     const send = async (newVacation: Vacation) => {
         try {
-                await axios.post("http://localhost:3003/admin/vacation/",newVacation)
+                await axios.post("http://localhost:3003/admin/vacation/",newVacation,
+                )
                 .then(res=>{
                     console.log(newVacation);
                     navigate("/admin/report");
@@ -43,7 +50,7 @@ function AddVacation(): JSX.Element {
                     <input type="text" {...register("price")}/>
 
                     <label>vacation_img:</label>
-                    <input type="file" {...register("vacation_img")}/>
+                    <input type="file" onChange={handleFile}/>
 
                     <input type="submit" value="save vacation" style={{ height: 50, backgroundColor: "blue", borderRadius: 20 }} />
                 </form>
