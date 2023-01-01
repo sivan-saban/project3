@@ -4,7 +4,6 @@ const admin_sql=`CREATE TABLE IF NOT EXISTS admin (
     id INT NOT NULL AUTO_INCREMENT,
     admin_name VARCHAR(45) NULL,
     admin_code VARCHAR(45) NULL,
-    followed_vacations JSON NULL,
     PRIMARY KEY (id));`;
 const user_sql=`CREATE TABLE IF NOT EXISTS user (
     id INT NOT NULL AUTO_INCREMENT,
@@ -20,7 +19,7 @@ const vacation_sql=`CREATE TABLE IF NOT EXISTS vacation (
     description VARCHAR(150) NULL,
     destination VARCHAR(45) NULL,
     price DECIMAL(10,2) NULL,
-    vacation_img VARCHAR(250) NULL,
+    vacation_img BLOB NULL,
     start_date DATE NULL,
     end_date DATE NULL,
     amountOfFollowers INT NULL,
