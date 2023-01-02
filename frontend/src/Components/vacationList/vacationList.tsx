@@ -74,7 +74,7 @@ function VacationList(): JSX.Element {
 
     return (
         <div className="vacationList">
-           {/* if thers no vacation, show me */}
+           {/* if thers no vacation, show me spinner */}
             { vacations.length === 0 && <Spinner /> }
 
             <div className="displayCard">

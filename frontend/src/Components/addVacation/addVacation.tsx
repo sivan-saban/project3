@@ -44,9 +44,9 @@ function AddVacation(): JSX.Element {
                 const headers = { "Content-Type": "multipart/form-data" };
                 await axios.post("http://localhost:3003/admin/vacation/",newVacation, { headers })
                 .then(response=>{
-                    const addProduct = response.data;
+                    const addVacation = response.data;
                 //send a new vacation to redux-global state
-                  store.dispatch({ type: vacationActionType.addVacation, payload: addProduct });
+                  store.dispatch({ type: vacationActionType.addVacation, payload: addVacation });
                     //update the localStorage
                     storageVacation.push(newVacation);
                     setVacations(storageVacation);
@@ -65,6 +65,8 @@ function AddVacation(): JSX.Element {
                 newVacation.end_date = newVacation.end_date || vacation?.end_date;
                 await axios.put("http://localhost:3003/admin/vacation/update", newVacation)
                 .then(res=>{
+                    const addVacation = res.data;
+                    store.dispatch({ type: vacationActionType.updateVacation, payload: addVacation });
                     //update the localStorage
                     storageVacation = storageVacation.filter((vacation: { id: number; })=> (vacation.id !== id));
                     storageVacation.push(newVacation);

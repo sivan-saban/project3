@@ -6,7 +6,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Admin from "../../Models/Admin";
 import { LoginModel } from "../../Models/loginModel";
 import User from "../../Models/User";
-import Modal from "../Modal/Modal";
+import { AuthActionType } from "../redux/authState";
+import { store } from "../redux/store";
 import "./Register.css";
 
 function Register(): JSX.Element {
@@ -39,8 +40,15 @@ function Register(): JSX.Element {
 
 const send =  async (user: User) => {
         try {
-            usersMap(user.user_name)?(setAlert(true)):(axios.post("http://localhost:3003/user/",user)  
-            .then(res=>navigate("/")));
+            // ראוט חדש - הוספתי לכתובת לוגין כדי שישלח תוקן
+            usersMap(user.user_name)?(setAlert(true)):(axios.post("http://localhost:3003/user/login",user)  
+            .then(res=>{
+                //get from backend token
+                const token = res.data;
+                console.log(token);
+                store.dispatch({type: AuthActionType.Register, payload:token});
+                navigate("/");
+            }));
         } catch (err: any) {
             console.log(err.message);
         }

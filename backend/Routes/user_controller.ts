@@ -1,27 +1,28 @@
 // All the routes that connect the the DB and client.
 import express, {NextFunction, Request, Response} from 'express';
 import user_logic from '../Logic/user_logic';
+import { getJWT } from '../Utils/JWT';
 
 
 // generic router 
 const user_router = express.Router();
-// gets all
+// gets allלדעתי אין צורך
 user_router.get("/all", async (request: Request, response: Response, next: NextFunction) => {
   response.status(200).json( await user_logic.getAllUsers())
 })
 
 user_router.get("/single/:id", async (request: Request, response: Response, next: NextFunction) => {
-  const someData = +request.params.id;
-  response.status(200).json( await user_logic.getSingleUser(someData))
+  const id = +request.params.id;
+  response.status(200).json( await user_logic.getSingleUser(id))
 })
 
-// sends information to DB
-user_router.post("/", async (request: Request, response: Response, next: NextFunction) => {
-  const someData = request.body;
-  response.status(201).json( await user_logic.addUser(someData))
-})
+//add user
+// user_router.post("/", async (request: Request, response: Response, next: NextFunction) => {
+//   const newuser = request.body;
+//   response.status(201).json( await user_logic.addUser(newuser))
+// })
 
-// delete information from DB
+// delete information from DB לדעתי אין צורך
 user_router.delete("/:id", async (request: Request, response: Response, next: NextFunction) => {
   const someData = +request.params.id;
   response.status(204).json( await user_logic.deleteUser(someData))
@@ -31,6 +32,15 @@ user_router.delete("/:id", async (request: Request, response: Response, next: Ne
 user_router.put("/update", async (request: Request, response: Response, next: NextFunction) => {
   const body = request.body;
   response.status(201).json( await user_logic.updateUser(body));
+})
+
+//REGISTER NEW USER
+user_router.post("/login", async (request: Request, response: Response, next: NextFunction) => {
+  const newUser = request.body;
+  const token = getJWT(newUser.user);
+  //save in header
+  response.set("Authorization",`Bearer ${token}`);
+  response.status(201).json( await user_logic.addUser(newUser))
 })
 
 
