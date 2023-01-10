@@ -33,9 +33,12 @@ export function authReducer(currentState = new AuthState(), action:AuthAction):A
         //they make the same
         case AuthActionType.Register: //get a token 
         case AuthActionType.Login:  
-            newState.token = action.payload;
-            //ממיר את הטוקן לאוביקט מסוג LoginModel
+        //save the token without Bearer
+            const myToken = action.payload.replace("Bearer", "")
+            newState.token = myToken;
+            //ממיר את הטוקן לאוביקט מסוג User
             const userLogin = jwtDecode<{user:User}>(newState.token);
+            //לוקח מהאוביקט רק את הuser לפי הסוג שהוא קיבל
             newState.user = userLogin.user;
             break;
 

@@ -32,9 +32,10 @@ const checkJWT = (token: string): Promise<boolean> => {
 const getUserNameFromJWT = (token:any) => {
     try {
         const myToken:any = jwt.decode(token.split(" ")[1]);
+        console.log(`my token  ${myToken}`);
         return myToken.user;
     } catch (err) {
-        //console.log(err);
+       // console.log(err);
         console.log("error getting user...");
     }
 }

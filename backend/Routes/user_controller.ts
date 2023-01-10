@@ -17,10 +17,11 @@ user_router.get("/single/:id", async (request: Request, response: Response, next
 })
 
 //add user
-// user_router.post("/", async (request: Request, response: Response, next: NextFunction) => {
-//   const newuser = request.body;
-//   response.status(201).json( await user_logic.addUser(newuser))
-// })
+user_router.post("/", async (request: Request, response: Response, next: NextFunction) => {
+  const newUser = request.body;
+  console.log(newUser);
+  response.status(201).json( await user_logic.addUser(newUser))
+})
 
 // delete information from DB לדעתי אין צורך
 user_router.delete("/:id", async (request: Request, response: Response, next: NextFunction) => {
@@ -35,13 +36,14 @@ user_router.put("/update", async (request: Request, response: Response, next: Ne
 })
 
 //REGISTER NEW USER
-user_router.post("/login", async (request: Request, response: Response, next: NextFunction) => {
-  const newUser = request.body;
-  const token = getJWT(newUser.user);
-  //save in header
-  response.set("Authorization",`Bearer ${token}`);
-  response.status(201).json( await user_logic.addUser(newUser))
-})
+// user_router.post("/register", async (request: Request, response: Response, next: NextFunction) => {
+//   const newUser = request.body;
+//   console.log(newUser);
+//   const token = getJWT(newUser.user_name);
+//   //save in header
+//   response.set("Authorization",`Bearer ${token}`);
+//   response.status(201).json( await user_logic.addUser(newUser))
+// })
 
 
 

@@ -34,7 +34,8 @@ const addUser = async (newUser: User): Promise<User> => {
     '${newUser.name}',
     '${newUser.last_name}',
     '${hash(newUser.user_name)}',
-    '${hash(newUser.password)}'
+    '${hash(newUser.password)}',
+    '${null}'
     )
     `
     const response : OkPacket = await dal.execute(sql);

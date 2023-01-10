@@ -40,13 +40,12 @@ function Register(): JSX.Element {
 
 const send =  async (user: User) => {
         try {
-            // ראוט חדש - הוספתי לכתובת לוגין כדי שישלח תוקן
-            usersMap(user.user_name)?(setAlert(true)):(axios.post("http://localhost:3003/user/login",user)  
+            usersMap(user.user_name)?(setAlert(true)):(axios.post("http://localhost:3003/user/",user)  
             .then(res=>{
                 //get from backend token
-                const token = res.data;
-                console.log(token);
-                store.dispatch({type: AuthActionType.Register, payload:token});
+                // const token = res.data;
+                // console.log(token);
+                // store.dispatch({type: AuthActionType.Register, payload:token});
                 navigate("/");
             }));
         } catch (err: any) {

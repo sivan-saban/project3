@@ -60,12 +60,14 @@ admin_router.put("/vacation/update", async (request: Request, response: Response
 
 admin_router.post("/login", async (request: Request, response: Response, next: NextFunction) => {
   let body = request.body;
+  console.log(body.user_name, body.password);
      //check if we have a token in the header.....
      if (request.headers.authorization){    
+      console.log("you token from header:",request.headers.authorization);
       try{
         //תבדוק אם הטוקן בתוקף
           if (await checkJWT(request.headers.authorization)){
-              response.status(202).json(`Welcome ${body.user}`);
+              response.status(202).json(`Welcome user ${body.user_name}`);
           } else {
               response.status(401).json("unauthorized user...");
           }
@@ -80,14 +82,15 @@ admin_router.post("/login", async (request: Request, response: Response, next: N
  //מה שכתוב כאן יהיה נכון אם אין לנו טבלה של אדמין, ולא נראלי שצריך לעשות את הבדיקה בלוגיק
 
  //בדיקת אימות שהמשתמש אכן הוא אדמין
-if (body.user=="admin" && body.password=="password"){
+if (body.user_name=="sivan" && body.password=="123456"){
   //קבל טוקן חדש ותתשלח את שם המשתמש, שזה הסיסמא שלי בעצם
-  const token = getJWT(body.user);
+  const token = getJWT(body.user_name);
+  console.log(token);
   //תשלח- תראה את הטוקן החדש
   response.set("Authorization",`Bearer ${token}`);
   //הפונקציה ממירה את הטוקן לסטרינג ומאפשר לנו לראות את שם המשתמש אבל לא הבנתי בדיוק למה זה נחוץ
-  console.log("user name:",getUserNameFromJWT(token));
-  response.status(202).json("welcome" + getUserNameFromJWT(token));
+  //console.log("user name: "$token);
+  response.status(202).json("welcome " + getUserNameFromJWT(token));
 } else {
   //אין לך הרשאה!!
   response.status(401).send("You are not authorized!!!!")

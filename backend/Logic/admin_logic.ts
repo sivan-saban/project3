@@ -102,8 +102,8 @@ const updateVacation = async (vacation: Vacation): Promise<Vacation> => {
     destination='${vacation.destination}',
     price=${vacation.price},
     vacation_img=NULL,
-    start_date='${vacation.start_date}',
-    end_date='${vacation.end_date}',
+    start_date=CAST('${vacation.start_date}' AS DATETIME),
+    end_date=CAST('${vacation.end_date}' AS DATETIME),
     amountOfFollowers=NULL
     WHERE id = ${vacation.id}
     `;

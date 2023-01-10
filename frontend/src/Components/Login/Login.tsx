@@ -55,8 +55,8 @@ const send =  async (userLogin: LoginModel) => {
                 if (userLogin.typeUser === "user" && usersMap(userLogin.user_name,userLogin.password)===true){
                     //add new user
                     const response = await axios.post("http://localhost:3003/user/login", userLogin);
-                    const token = response.data;
-                    store.dispatch({type:AuthActionType.Login, payload:token});
+                    // const token = response.data;
+                    // store.dispatch({type:AuthActionType.Login, payload:token});
                     navigate("/user")
                 }else{
                     setAlert(true);
@@ -73,7 +73,7 @@ const send =  async (userLogin: LoginModel) => {
                 <div className = "Alert">{alertOn()}</div>
                 <label>Select a user type</label>
                 <select required {...register("typeUser")}>
-                    <option>user</option>
+                    <option>admin</option>
                     <option>user</option>
                 {/* {(store.getState().authReducer.userRole).map((item:string) => <option key={item}>{item}</option>)} */}
                 </select>
@@ -82,7 +82,7 @@ const send =  async (userLogin: LoginModel) => {
                 <label>Enter Password</label>
                 <input type="password" required {...register("password")}></input>
                 <input required type="submit" value="Entrance"/>
-                <p>Don't have an account?<NavLink to="/register"><h3>Register</h3></NavLink></p>
+                <h3>Don't have an account?</h3><NavLink to="/register">Register</NavLink>
                 <button onClick={()=> {
                     store.dispatch({type:AuthActionType.Logout, payload:null})}}>Log Out
                 </button>
