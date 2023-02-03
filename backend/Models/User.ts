@@ -4,7 +4,7 @@ class User{
     last_name:string="";
     user_name:string="";
     password:string="";
-    followed_list:JSON;
+    followed_list:string="";
 }
 
 export default User;

@@ -10,7 +10,9 @@ import "./Login.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import { store } from "../redux/store";
-import { AuthActionType, UserRole } from "../redux/authState";
+
+
+
 
 function Login(): JSX.Element {
     const [users, setUsers] = useState<User[]>([]);
@@ -19,22 +21,24 @@ function Login(): JSX.Element {
     const navigate = useNavigate();
     const [alert, setAlert] = useState<Boolean>(false);
     var hash = require('object-hash');
-
     const alertOn = ()=>{
         if (alert === true){
             return <Alert variant="outlined" severity="error">One of the details you entered is incorrect</Alert>
         }
     };
-    
+
     const usersMap = (user_name:string,password:string) => {
         let response = false;
         users.map((user: { user_name: string; password: string; }) => {if (hash(user_name)===user.user_name && hash(password)===user.password){response = true}
-        else{
-            setAlert(true)
-        }});
+        else{setAlert(true)}});
         return response
     };
-        
+       
+    useEffect(()=>{
+        localStorage.setItem('myToken', "");
+        localStorage.setItem('id', "");
+
+    },[]);
 
     useEffect(()=>{
         axios.get("http://localhost:3003/admin/all")
@@ -45,50 +49,56 @@ function Login(): JSX.Element {
 
 const send =  async (userLogin: LoginModel) => {
         try {
-                if(userLogin.typeUser === "admin" && hash(userLogin.user_name) === admin[0].admin_name && hash(userLogin.password) === admin[0].admin_code){
-                    //add new admin
-                    const response = await axios.post("http://localhost:3003/admin/login", userLogin);
-                    const token = response.data;
-                    store.dispatch({type:AuthActionType.Login, payload:token});
-                    navigate("/admin")
+                if(userLogin.typeUser === "admin"){
+                axios.post("http://localhost:3003/admin/login", userLogin)
+                    .then(response=>{
+                        console.log(response.headers["authorization"]);
+                        const currentToken = response.headers["authorization"];
+                        localStorage.setItem("myToken", currentToken||"");
+                        console.log(response.data);
+                        response.data?navigate("/admin"):navigate("/");
+                    })
                 }
-                if (userLogin.typeUser === "user" && usersMap(userLogin.user_name,userLogin.password)===true){
-                    //add new user
-                    const response = await axios.post("http://localhost:3003/user/login", userLogin);
-                    // const token = response.data;
-                    // store.dispatch({type:AuthActionType.Login, payload:token});
-                    navigate("/user")
+                if (userLogin.typeUser === "user" ){
+                    await axios.post("http://localhost:3003/user/login", userLogin)
+                    .then(response=>{
+                        if (response.status===403){setAlert(true)}else{
+                        console.log(response.headers["authorization"]);
+                        const currentToken = response.headers["authorization"];
+                        localStorage.setItem("myToken", currentToken||"");
+                        localStorage.setItem("id",response.data);
+                        console.log(response.data);
+                        response.data?navigate("/user"):navigate("/");}})
                 }else{
                     setAlert(true);
                 }
         } catch (err: any) {
             console.log(err.message);
+            setAlert(true);
         }
     }
     return (
-        <div className="Login">
-            <form onSubmit={handleSubmit(send)}>
-			<div className="Box">
-                <h2>Login</h2>
-                <div className = "Alert">{alertOn()}</div>
-                <label>Select a user type</label>
-                <select required {...register("typeUser")}>
-                    <option>admin</option>
-                    <option>user</option>
-                {/* {(store.getState().authReducer.userRole).map((item:string) => <option key={item}>{item}</option>)} */}
-                </select>
-                <label>Enter User Name</label>
-                <input type="text" required {...register("user_name")}></input>
-                <label>Enter Password</label>
-                <input type="password" required {...register("password")}></input>
-                <input required type="submit" value="Entrance"/>
-                <h3>Don't have an account?</h3><NavLink to="/register">Register</NavLink>
-                <button onClick={()=> {
-                    store.dispatch({type:AuthActionType.Logout, payload:null})}}>Log Out
-                </button>
-                </div>
-            </form>
-        </div>
+                
+<div className="Login">
+        <form className="login" onSubmit={handleSubmit(send)}>
+        <div className="form container">
+            <h4 className="head">Login</h4>
+            <div className = "Alert">{alertOn()}</div>
+            <label>Select a user type:</label>
+            <select className="form-control" required {...register("typeUser")}>
+                <option>admin</option>
+                <option>user</option>
+            </select>
+            <label htmlFor="sel">Enter User Name:</label>
+            <input  className="form-control" id="sel" type="text" required {...register("user_name")}></input>
+            <label>Enter Password:</label>
+            <input  className="form-control" type="password" required {...register("password")}></input>
+            <input  className="btn btn-primary" required type="submit" value="Entrance"/>
+            <br />
+            <p>Don't have an account yet?&nbsp;&nbsp;<NavLink to="/register"><span> Register&nbsp;</span></NavLink></p>
+            </div>
+        </form>
+    </div>
     );
 }
 

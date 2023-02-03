@@ -1,14 +1,19 @@
-.MenuAdmin {
+.MenuUser {
 	text-align:center;
 }
 
-.MenuAdmin > div {
+.MenuUser > div {
     color:rgb(24, 119, 242);
-    display: inline-block;
+    display:block;
     display: -moz-inline-box;
     *display: inline; /* For IE7 */
     zoom: 1; /* Trigger hasLayout */
-    width: 25%;
+    width: 100%;
     text-align: center;
-    margin-bottom: 0;
+    margin-bottom: 2%;
+}
+
+#exit{
+    text-align: center;
+    margin-left: 80%;
 }

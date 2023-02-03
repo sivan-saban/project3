@@ -2,12 +2,11 @@ class Vacation{
     id:number=0;
     description:string | undefined;
     destination:string | undefined;
-    vacation_img:string='';
+    price:number | undefined;
+    vacation_img:any='';
     start_date:Date=new Date();
     end_date:Date=new Date();
-    price:number | undefined;
     amountOfFollowers:number=0;
-    item: number | undefined;
 }
 
 export default Vacation;

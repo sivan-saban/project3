@@ -6,8 +6,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import Admin from "../../Models/Admin";
 import { LoginModel } from "../../Models/loginModel";
 import User from "../../Models/User";
-import { AuthActionType } from "../redux/authState";
-import { store } from "../redux/store";
+import Modal from "../Modal/Modal";
 import "./Register.css";
 
 function Register(): JSX.Element {
@@ -41,32 +40,26 @@ function Register(): JSX.Element {
 const send =  async (user: User) => {
         try {
             usersMap(user.user_name)?(setAlert(true)):(axios.post("http://localhost:3003/user/",user)  
-            .then(res=>{
-                //get from backend token
-                // const token = res.data;
-                // console.log(token);
-                // store.dispatch({type: AuthActionType.Register, payload:token});
-                navigate("/");
-            }));
+            .then(res=>navigate("/")));
         } catch (err: any) {
             console.log(err.message);
         }
     }
     return (
         <div className="Register">
-            <form onSubmit={handleSubmit(send)}>
-			<div className="Box">
-                <h2>Register</h2>
+            <form className="register" onSubmit={handleSubmit(send)}>
+			<div className="form">
+                <h4 className="head">Register</h4>
                 <div className = "Alert">{alertOn()}</div>
-                <label>Enter your first name</label>
-                <input type="text" required {...register("name")}></input>
-                <label>Enter your last name</label>
-                <input type="text" required {...register("last_name")}></input>
-                <label>Enter User Name</label>
-                <input type="text" required {...register("user_name")}></input>
-                <label>Enter Password</label>
-                <input type="password" required {...register("password")}></input>
-                <input required type="submit" value="Register"/>
+                <label>Enter your first name:</label>
+                <input className="form-control" type="text" required {...register("name")}></input>
+                <label>Enter your last name:</label>
+                <input className="form-control" type="text" required {...register("last_name")}></input>
+                <label>Enter User Name:</label>
+                <input className="form-control" type="text" required {...register("user_name")}></input>
+                <label>Enter Password:</label>
+                <input className="form-control" type="password" required {...register("password")}></input>
+                <input className="btn btn-primary" required type="submit" value="Register"/>
             </div>
             </form>
         </div>

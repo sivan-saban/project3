@@ -1,11 +1,11 @@
-import { combineReducers, createStore } from "redux";
+import { combineReducers} from "redux";
 import { configureStore} from "@reduxjs/toolkit"
 import { vacationReducer } from "./vacationState";
-import { authReducer } from "./authState";
 
-//איחוד כל הרדיוסרים
-const reducers = combineReducers({vacationReducer:vacationReducer,authReducer:authReducer});
-//החצנה של סטור ושמירה של כל הרדיוסרים במשתנה סטור
-export const store = configureStore({reducer:reducers});
+
+//Union of all the reducers
+const reducers = combineReducers({vacationState : vacationReducer});
+//retention and externalization all the reducers in store variable.
+export const store = configureStore({reducer : reducers});
 
 //export const store = createStore(vacationReducer);
